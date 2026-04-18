@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Case Study | Scalable File Processing</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: #0f172a;
+  color: #e2e8f0;
+}
+
+.container {
+  max-width: 1000px;
+  margin: auto;
+  padding: 40px 20px;
+}
+
+h2 {
+  margin-top: 40px;
+  border-left: 4px solid #38bdf8;
+  padding-left: 10px;
+}
+
+.card {
+  background: #1e293b;
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 12px;
+}
+
+.highlight {
+  color: #38bdf8;
+}
+
+/* Flow */
+.flow-container {
+  margin-top: 20px;
+}
+
+.step, .sub, .flow-line {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: 0.6s ease;
+}
+
+.step {
+  background: #1e293b;
+  padding: 15px;
+  border-radius: 10px;
+  margin-top: 20px;
+  font-weight: bold;
+}
+
+.sub {
+  margin-left: 20px;
+  color: #94a3b8;
+}
+
+.flow-line {
+  height: 40px;
+  width: 2px;
+  background: #334155;
+  margin: auto;
+  position: relative;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  background: #38bdf8;
+  border-radius: 50%;
+  position: absolute;
+  left: -3px;
+  animation: moveDown 1.5s infinite linear;
+}
+
+@keyframes moveDown {
+  0% { top: 0; opacity: 0; }
+  20% { opacity: 1; }
+  100% { top: 40px; opacity: 0; }
+}
+
+.show {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+img {
+  width: 100%;
+  border-radius: 10px;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<a href="index.html" style="color:#38bdf8;">← Back</a>
+
+<h2>Scalable File Processing Architecture</h2>
+
+<div class="card">
+<b>Problem</b>
+<p>
+Process large files with audit tracking. Sequential processing would overload Integration Server.
+</p>
+</div>
+
+<div class="card">
+<b>Solution</b>
+<p>
+Designed an <span class="highlight">event-driven architecture</span> using file splitting,
+parallel processing, and reconciliation logic.
+</p>
+</div>
+
+<h2>Architecture Flow</h2>
+
+<div class="flow-container">
+
+<div class="step">1️⃣ MFT → Work Directory</div>
+<div class="flow-line"><div class="dot"></div></div>
+
+<div class="step">2️⃣ Initial Service</div>
+<div class="sub">Insert audit START, split file, publish events</div>
+
+<div class="flow-line"><div class="dot"></div></div>
+
+<div class="step">3️⃣ Messaging Layer</div>
+
+<div class="flow-line"><div class="dot"></div></div>
+
+<div class="step">4️⃣ Parallel Processing</div>
+<div class="sub">Process chunks → load Snowflake → publish completion</div>
+
+<div class="flow-line"><div class="dot"></div></div>
+
+<div class="step">5️⃣ Reconciliation</div>
+<div class="sub">Track completion via cache</div>
+
+<div class="flow-line"><div class="dot"></div></div>
+
+<div class="step">6️⃣ Final</div>
+<div class="sub">Update audit as COMPLETED</div>
+
+</div>
+
+<h2>Diagram</h2>
+<div class="card">
+<img src="architecture.png">
+</div>
+
+</div>
+
+<script>
+const elements = document.querySelectorAll('.step, .sub, .flow-line');
+
+let delay = 0;
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      setTimeout(() => {
+        entry.target.classList.add('show');
+      }, delay);
+      delay += 150;
+    }
+  });
+});
+
+elements.forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
